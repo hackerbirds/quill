@@ -1,12 +1,16 @@
-# Hackerbirds's static blog page builder
+# Quill (Hackerbirds's static blog page builder)
+
+> [!NOTE]  
+> This project is currently being rebuilt to be more usable for external users, with the goal
+> that anyone can use and customize this for their own blog.
 
 Write blog posts quickly using this little script. Originally based on [Lichen](https://lichen.sensorstation.co/), it is backwards compatible with Gemtext formatting.
 
 ## Installation and usage
 
-On debian you can install the necessary Python dependencies (`watchdog`) with the `./install.sh` bash script.
+Using `pip`, as such: `python3 -m pip install -r requirements.txt`
 
-To write a post named `example-post`, make a file `posts/example-post.md`, write your stuff in there, then call `python3 build.py example-post`. The script is build to stay active and automatically recompile whenever it detects a change inside `posts/example-post.md`.
+To write a post named `example-post`, make a file `posts/example-post.md`, write your stuff in there, then call `python3 build.py`. The script is build to stay active and automatically recompile whenever it detects a change inside `posts/*.md`.
 
 ## Features
 
