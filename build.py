@@ -2,38 +2,13 @@ from html import escape
 from datetime import datetime
 import sys
 import time
+import glob
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from pathlib import Path
 from pygments import highlight
 from pygments.lexers import RustLexer
 from pygments.formatters import HtmlFormatter
-
-# To manually change
-RECOMMENDED_BLOG_POST_URL = ""
-
-def has_arg_flag(flag):
-    for i in range(len(sys.argv)):
-        if (sys.argv[i] == flag):
-            return True
-    return False
-
-POST_NAME = sys.argv[1]
-HAS_CODE_BLOCK = has_arg_flag("--code-block")
-HAS_KATEX = has_arg_flag("--katex")
-
-# All our blog posts end like this. The date is the building date
-def the_hackerbirds_love_you():
-    return "<p><i>the hackerbirds love you - . . - "+datetime.today().strftime('%Y-%m-%d')+"</i></p>"
-
-# We still keep header.html in another file so that our IDE can prettify it
-footer_html = """<br><br></main>
-<footer>
-    """+the_hackerbirds_love_you()+"""
-    <a href="#">scroll up</a> &emsp; <a href="../">homepage</a> &emsp; <a href="""+RECOMMENDED_BLOG_POST_URL+""">check out our previous blog post</a>
-</footer>
-</body>
-</html>""" 
 
 def parse_inline(escaped_line):
     # This is for inline code blocks
@@ -191,6 +166,8 @@ def write_index_html(post, output_path):
     # Erases contents of index.html
     open(output_path, "w").close()
     with open(output_path, "a") as index_html:
+        index_html.write("<!DOCTYPE html>")
+        
         # Write header.html to index.html
         with open("header.html", "r") as header_html:
             if HAS_KATEX:
@@ -217,11 +194,26 @@ def write_index_html(post, output_path):
             else:
                 index_html.write(header_html.read())
 
+        index_html.write("""
+            <body>
+            <div class="banner" id="banner-id">
+                <a href="../" title="Homepage">
+                    <img src="../assets/bird_neutral.svg" class="banner-logo" alt="Main page" />
+                </a>
+                <b>birdbrained</b>
+            </div>
+        """)
+        index_html.write("<main>")
+
         # Write post contents
         index_html.write(post)
 
+        today_date = datetime.today().strftime('%Y-%m-%d')
+
+        index_html.write("<br><br></main>")
         # Write footer
-        index_html.write(footer_html)  
+        with open("footer.html", "r") as footer_html:
+            index_html.write(footer_html.read().format(date=today_date))
 
 def build(post_name):
     global HAS_CODE_BLOCK
@@ -296,33 +288,48 @@ def build(post_name):
 
         return html
 
-def compile():
-    ugly_html = build(POST_NAME)
-
-    write_index_html(ugly_html, "results/"+POST_NAME+"/index.html")
+def compile(post_name):
+    # Create folder for index.html to sit in if it doesn't already exist
+    Path("results/"+postName).mkdir(parents=True, exist_ok=True)
+    ugly_html = build(post_name)
+    write_index_html(ugly_html, "results/"+post_name+"/index.html")
 
 
 class FileHandler(FileSystemEventHandler):
     def on_modified(self, event):
-        print("Modification detected. Rebuilding post.md...")
-        compile()
-        print("Done!")
+
+        modifiedFileName = event.src_path.split("/")[-1][:-3]
+        compile(modifiedFileName)
+        print(f"{modifiedFileName}.md has been updated")
+
+def has_arg_flag(flag):
+        for i in range(len(sys.argv)):
+            if (sys.argv[i] == flag):
+                return True
+        return False
 
 if __name__ == "__main__":
-    print("Compiling post \""+POST_NAME+"\"")
-    print("Compiling with Katex:", HAS_KATEX)
-    print("Compiling with formatted code blocks:", HAS_CODE_BLOCK)
-
+    HAS_CODE_BLOCK = has_arg_flag("--code-block")
+    HAS_KATEX = has_arg_flag("--katex")
+    posts = glob.glob("posts/*.md")
+    
+    if HAS_KATEX:
+        print("Compiling with KaTeX")
+    if HAS_CODE_BLOCK:
+        print("Compiling with formatted code blocks")
+    
     # Create folders if they don't exist already
     Path("posts/").mkdir(parents=True, exist_ok=True)
-    Path("results/"+POST_NAME).mkdir(parents=True, exist_ok=True)
 
-    compile()
+    for post in posts:
+        postName = post.split("/")[-1][:-3] # remove .md extension and folder from file name
+        print("Compiling post \""+postName+"\"")
+        compile(postName)
     
-    print("Done! Now observing changes...")
+    print("Posts converted successfully! Now observing changes...")
     event_handler = FileHandler()
     observer = Observer()
-    observer.schedule(event_handler, path='posts/'+POST_NAME+'.md', recursive=False)
+    observer.schedule(event_handler, path='posts/', recursive=False)
     observer.start()
 
     try:
