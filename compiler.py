@@ -121,7 +121,7 @@ class HTMLCompiler:
             if len(split_code_line) % 2 == 0:
                 raise Exception(
                     'Strikethrough formatted at line "'
-                    + line
+                    + escaped_line
                     + "\". Are you sure there is the right amount of '~~' in your line?"
                 )
 

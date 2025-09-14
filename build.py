@@ -5,9 +5,6 @@ import glob
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 from pathlib import Path
-from pygments import highlight
-from pygments.lexers import RustLexer
-from pygments.formatters import HtmlFormatter
 from compiler import HTMLCompiler
 
 
