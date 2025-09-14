@@ -12,7 +12,7 @@ def write_index_html(post, output_path):
     # Erases contents of index.html
     open(output_path, "w").close()
     with open(output_path, "a") as index_html:
-        index_html.write("<!DOCTYPE html>")
+        index_html.write("<!DOCTYPE html>\n")
 
         # Write header.html to index.html
         with open("header.html", "r") as header_html:
@@ -60,7 +60,7 @@ def write_index_html(post, output_path):
 
         today_date = datetime.today().strftime("%Y-%m-%d")
 
-        index_html.write("<br><br>\n</main>")
+        index_html.write("<br><br>\n</main>\n")
         # Write footer
         with open("footer.html", "r") as footer_html:
             index_html.write(footer_html.read().format(date=today_date))
