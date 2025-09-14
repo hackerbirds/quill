@@ -1,4 +1,4 @@
-# Creating blog posts faster with hackerbirds-blog
+# Creating blog posts faster with quill
 
 (To see the text before building, see `posts/test.md`. If you want the compiled HTML, see `results/test/index.html`.)
 (If you are reading this through GitHub, the markdown viewer will automatically enable. Please click "Raw" to see the raw version, this is important!!)
@@ -7,7 +7,7 @@ Creating paragraphs is easy. Just write as much as you want in one straight line
 
 Just add a new line like we just did. If you want to separate your text even more, there's always the horizontal bar:
 ---
-Now your text is extra separate. Awesome.
+Now your text is extra separate. Awesome!!!
 
 Each new line (`\n`) is a line break in HTML, so add spaces whenever you feel like it. Here's an extra wide space for your paragraphs:
 
