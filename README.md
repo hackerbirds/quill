@@ -6,13 +6,24 @@
 
 Write blog posts quickly using this little script. Originally based on [Lichen](https://lichen.sensorstation.co/), it is backwards compatible with Gemtext formatting.
 
+## Disclaimers
+
+### This is not a fully-automated script
+
+You are meant to manually modify the code and resulting HTML to your liking if needed.
+
+### You are all alone in this adventure
+
+We will not maintain or modify this project for anyone else but us. That said, if you think you can use it or modify it for yourself, go ahead.
+
 ## Installation and usage
 
 Using `pip`, as such: `python3 -m pip install -r requirements.txt`
 
 To write a post named `example-post`, make a file `posts/example-post.md`, write your stuff in there, then call `python3 build.py`. The script is build to stay active and automatically recompile whenever it detects a change inside `posts/*.md`.
 
-## Features
+<details>
+<summary><h2>How to use</h2></summary>
 
 Below are examples for each of the features. 
 
@@ -114,17 +125,4 @@ Now, this text is separated and alone.
 <>
 ````
 
-## What? Why?
-
-* https://hackerbirds.neocities.org/Slightly-Less-Worse-HTML/
-* https://hackerbirds.neocities.org/new-redesign/
-
-## Disclaimers
-
-### This is not a fully-automated script
-
-You are meant to manually modify the code and resulting HTML to your liking if needed.
-
-### You are all alone in this adventure
-
-We will not maintain or modify this project for anyone else but us. That said, if you think you can use it or modify it for yourself, go ahead.
+</details>
