@@ -71,7 +71,8 @@ def compile(post_name):
     Path("results/" + postName).mkdir(parents=True, exist_ok=True)
     global HAS_CODE_BLOCK
     with open("posts/" + post_name + ".md", "r") as f:
-        ugly_html = HTMLCompiler(f).compile()
+        html_compiler = HTMLCompiler(f)
+        ugly_html = html_compiler.compile()
         write_index_html(ugly_html, "results/" + post_name + "/index.html")
 
 

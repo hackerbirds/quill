@@ -1,5 +1,7 @@
 from enum import Enum
 from html import escape
+import re
+from macros import FORMAT_OPTIONS
 
 
 class TextMode(Enum):
@@ -147,101 +149,26 @@ class HTMLCompiler:
                         + escaped_line[code_tick_index + 2 :]
                     )
                     open_tag = True
+
+        escaped_line = escaped_line.replace("\\star", "*")
+        escaped_line = escaped_line.replace("\\tick", "`")
+
         return escaped_line
 
     def parseLine(self, line):
         escaped_line = escape(line)
-        if escaped_line == "\n":
-            return "<br>\n"
-        elif escaped_line.startswith("# "):
-            text = escaped_line.rstrip()[2:]
-            return "<h1>" + self.parseInline(text) + "</h1>\n"
-        elif escaped_line.startswith("## "):
-            text = escaped_line.rstrip()[3:]
-            return "<h2>" + self.parseInline(text) + "</h2>\n"
-        elif escaped_line.startswith("### "):
-            text = escaped_line.rstrip()[4:]
-            return "<h3>" + self.parseInline(text) + "</h3>\n"
-        elif escaped_line.startswith("% "):
-            text = escaped_line.rstrip()[2:]
-            return (
-                '<div class="f-v2">\n\t<div class="bird neutral"></div>\n\t<p>'
-                + self.parseInline(text)
-                + "</p>\n</div>\n"
-            )
-        elif escaped_line.startswith("-&gt; ") or escaped_line.startswith("-> "):
-            if " | " in escaped_line:
-                split_line = escaped_line.rstrip().split(" | ")
-                url = " ".join(split_line[0].split(" ")[1:])
-                text = ""
-                img_quote_html = ""
-                if len(split_line) > 1:  # There is text after the URL
-                    text = ' alt="' + split_line[1] + '"'
-                if len(split_line) > 2:  # There is a quote after the text
-                    img_quote_html = "<i>" + split_line[2] + "</i>"
+        for reg, exp in FORMAT_OPTIONS.items():
+            formatted_line = exp
+            search = re.search(reg, escaped_line)
+            if search is not None:
+                for i, group in enumerate(search.groups()[1:]):
+                    formatted_line = formatted_line.replace(
+                        "{" + f"{i}" + "}", self.parseInline(group).rstrip()
+                    )
+                return formatted_line
 
-                return (
-                    '<div class="attachment-div">\n\t<img onclick="window.open(\''
-                    + url
-                    + '\', \'_blank\');" class="attachment" src="'
-                    + url
-                    + '"'
-                    + text
-                    + "/>"
-                    + self.parseInline(img_quote_html)
-                    + "</div>\n"
-                )
-            else:
-                split_line = escaped_line.rstrip().split(" ")
-                url = split_line[1]
-                text = ""
-                if len(split_line) > 2:  # There is text after the URL
-                    text = " ".join(split_line[2:])
-
-                return (
-                    '<img class="attachment" src="'
-                    + url
-                    + '" alt="'
-                    + self.parseInline(text)
-                    + '"/>\n'
-                )
-        # Link/URL (" => ")
-        elif escaped_line.startswith("=&gt; ") or escaped_line.startswith("=> "):
-            split_line = escaped_line.rstrip().split(" ")
-            url = split_line[1]
-            text = url
-            if len(split_line) > 2:  # There is text after the URL
-                text = " ".join(split_line[2:])
-
-            return (
-                '<a class="arrow" href="'
-                + url
-                + '">'
-                + self.parseInline(text)
-                + "</a>\n<br>\n"
-            )
-        # List element
-        elif escaped_line.startswith("* "):
-            return "\t<li>" + self.parseInline(line[2:]).rstrip() + "</li>\n"
-        elif escaped_line.startswith("*) "):
-            return "\t<li>" + self.parseInline(line[3:]).rstrip() + "</li>\n"
-        # Blockquote (" > ")
-        elif (
-            escaped_line.startswith("&gt; ") and not escaped_line.startswith("=&gt; ")
-        ) or (escaped_line.startswith("> ") and not escaped_line.startswith("=> ")):
-            return (
-                "<blockquote>\n\t<p>"
-                + self.parseInline(escaped_line[4:]).rstrip()
-                + "</p>\n</blockquote>\n"
-            )
-        # Bar line
-        elif escaped_line == "---\n":
-            return "<hr>\n"
-        else:
-            html = "<p>" + self.parseInline(escaped_line).rstrip() + "</p>\n"
-            html = html.replace("\\star", "*")
-            html = html.replace("\\tick", "`")
-            return html
+        # Nothing was to be formatted, so we default to a paragraph
+        return "<p>" + self.parseInline(escaped_line).rstrip() + "</p>\n"
 
     def compile(self) -> str:
         for line in self.mdFile:
@@ -251,6 +178,8 @@ class HTMLCompiler:
                         # Exit code block state
                         self.state = TextMode.REGULAR
                         self.html += "</pre>\n"
+                    else:
+                        self.html += line
                 case TextMode.RAW_HTML:
                     if line == "<>\n":
                         self.state = TextMode.REGULAR
