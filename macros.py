@@ -1,4 +1,14 @@
-FORMAT_OPTIONS = {
+# Inline text effects
+INLINE_FORMAT = {
+    "*": "b",
+    "___": "u",
+    "__": "i",
+    "~~": "s",
+    "`": "code",
+}
+
+# Full line format options
+LINE_FORMAT = {
     # Empty line: line break
     r"^(\n)$": "<br>\n",
     # "---": horizontal bar break

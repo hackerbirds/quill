@@ -24,7 +24,7 @@ Wow, silent.
 
 ## Formatting
 
-You can do a bunch of inline stuff, like *bold*, __italic__, or ~~strikethrough~~ text if that's what you want. __*~~why not all of them at once too?~~*__
+You can do a bunch of inline stuff, like *bold*, __italic__, ___underline___, or ~~strikethrough~~ text if that's what you want. __*~~why not all of them at once too?~~*__
 
 Need to use a single \star or \tick in the middle of your text too? Write "\ star" or "\ tick" (without the space): *now\staryou\starcan\starhave\starall\starthe\starstars* 
 

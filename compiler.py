@@ -1,8 +1,7 @@
 from enum import Enum
 from html import escape
 import re
-from macros import FORMAT_OPTIONS
-
+from macros import LINE_FORMAT, INLINE_FORMAT
 
 class TextMode(Enum):
     REGULAR = 1
@@ -19,31 +18,14 @@ class HTMLCompiler:
         self.state = TextMode.REGULAR
 
     def parse_inline(self, line):
-        inline_characters = ["`", "__", "*", "~~"]
-        for c in inline_characters:
+        for c, htmlTag in INLINE_FORMAT.items():
             # Number of times `c` has been replaced
             i = 0
             while c in line:
                 if i % 2 == 0:
-                    match c:
-                        case "`":
-                            line = line.replace(c, "<code>", 1)
-                        case "__":
-                            line = line.replace(c, "<i>", 1)
-                        case "*":
-                            line = line.replace(c, "<b>", 1)
-                        case "~~":
-                            line = line.replace(c, "<s>", 1)
+                    line = line.replace(c, f"<{htmlTag}>", 1)
                 else:
-                    match c:
-                        case "`":
-                            line = line.replace(c, "</code>", 1)
-                        case "__":
-                            line = line.replace(c, "</i>", 1)
-                        case "*":
-                            line = line.replace(c, "</b>", 1)
-                        case "~~":
-                            line = line.replace(c, "</s>", 1)
+                    line = line.replace(c, f"</{htmlTag}>", 1)
 
                 i += 1
 
@@ -54,7 +36,7 @@ class HTMLCompiler:
 
     def parseLine(self, line):
         escaped_line = escape(line)
-        for reg, exp in FORMAT_OPTIONS.items():
+        for reg, exp in LINE_FORMAT.items():
             formatted_line = exp
             search = re.search(reg, escaped_line)
             if search is not None:
@@ -72,7 +54,6 @@ class HTMLCompiler:
             match self.state:
                 case TextMode.CODE_BLOCK:
                     if line == "```\n":
-                        # Exit code block state
                         self.state = TextMode.REGULAR
                         self.html += "</pre>\n"
                     else:
@@ -81,7 +62,6 @@ class HTMLCompiler:
                     if line == "<>\n":
                         self.state = TextMode.REGULAR
                     else:
-                        # Unparsed line (raw HTML)
                         self.html += line
                 case TextMode.UNORDERED_LIST:
                     if line.startswith("* "):
