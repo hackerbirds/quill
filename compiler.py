@@ -18,142 +18,39 @@ class HTMLCompiler:
         self.html = ""
         self.state = TextMode.REGULAR
 
-    def parseInline(self, escaped_line):
-        # This is for inline code blocks
-        if "`" in escaped_line:
-            split_code_line = escaped_line.split("`")
-            if len(split_code_line) % 2 == 0:
-                # Means there's an odd amount of '`` which shouldn't happen
-                raise Exception(
-                    'Code tag weirdly formatted at line "'
-                    + escaped_line
-                    + "\". Are you sure there is the right amount of '`' in your line?"
-                )
-
-            open_tag = True
-            # For loop for all the `
-            for thing in split_code_line:
-                # Actually the loop goes one extra round so
-                # we need this if condition for when there are no more `
-                if "`" not in escaped_line:
-                    break
-                code_tick_index = escaped_line.index("`")
-                if open_tag is True:
-                    escaped_line = (
-                        escaped_line[:code_tick_index]
-                        + "<code>"
-                        + escaped_line[code_tick_index + 1 :]
-                    )
-                    open_tag = False
+    def parse_inline(self, line):
+        inline_characters = ["`", "__", "*", "~~"]
+        for c in inline_characters:
+            # Number of times `c` has been replaced
+            i = 0
+            while c in line:
+                if i % 2 == 0:
+                    match c:
+                        case "`":
+                            line = line.replace(c, "<code>", 1)
+                        case "__":
+                            line = line.replace(c, "<i>", 1)
+                        case "*":
+                            line = line.replace(c, "<b>", 1)
+                        case "~~":
+                            line = line.replace(c, "<s>", 1)
                 else:
-                    escaped_line = (
-                        escaped_line[:code_tick_index]
-                        + "</code>"
-                        + escaped_line[code_tick_index + 1 :]
-                    )
-                    open_tag = True
+                    match c:
+                        case "`":
+                            line = line.replace(c, "</code>", 1)
+                        case "__":
+                            line = line.replace(c, "</i>", 1)
+                        case "*":
+                            line = line.replace(c, "</b>", 1)
+                        case "~~":
+                            line = line.replace(c, "</s>", 1)
 
-        # Inline italic text
-        if "__" in escaped_line:
-            split_code_line = escaped_line.split("__")
-            if len(split_code_line) % 2 == 0:
-                raise Exception(
-                    'Italics formatted at line "'
-                    + escaped_line
-                    + "\". Are you sure there is the right amount of '__' in your line?"
-                )
+                i += 1
 
-            open_tag = True
-            # For loop for all the `
-            for thing in split_code_line:
-                # Actually the loop goes one extra round so
-                # we need this if condition for when there are no more `
-                if "__" not in escaped_line:
-                    break
-                code_tick_index = escaped_line.index("__")
-                if open_tag is True:
-                    escaped_line = (
-                        escaped_line[:code_tick_index]
-                        + "<i>"
-                        + escaped_line[code_tick_index + 2 :]
-                    )
-                    open_tag = False
-                else:
-                    escaped_line = (
-                        escaped_line[:code_tick_index]
-                        + "</i>"
-                        + escaped_line[code_tick_index + 2 :]
-                    )
-                    open_tag = True
-        # Inline bold text
-        if "*" in escaped_line:
-            split_code_line = escaped_line.split("*")
-            if len(split_code_line) % 2 == 0:
-                raise Exception(
-                    'Bold formatted at line "'
-                    + escaped_line
-                    + "\". Are you sure there is the right amount of '*' in your line?"
-                )
+        line = line.replace("\\star", "*")
+        line = line.replace("\\tick", "`")
 
-            open_tag = True
-            # For loop for all the `
-            for thing in split_code_line:
-                # Actually the loop goes one extra round so
-                # we need this if condition for when there are no more `
-                if "*" not in escaped_line:
-                    break
-                code_tick_index = escaped_line.index("*")
-                if open_tag is True:
-                    escaped_line = (
-                        escaped_line[:code_tick_index]
-                        + "<b>"
-                        + escaped_line[code_tick_index + 1 :]
-                    )
-                    open_tag = False
-                else:
-                    escaped_line = (
-                        escaped_line[:code_tick_index]
-                        + "</b>"
-                        + escaped_line[code_tick_index + 1 :]
-                    )
-                    open_tag = True
-        # Inline strikethrough text
-        if "~~" in escaped_line:
-            split_code_line = escaped_line.split("~~")
-            if len(split_code_line) % 2 == 0:
-                raise Exception(
-                    'Strikethrough formatted at line "'
-                    + escaped_line
-                    + "\". Are you sure there is the right amount of '~~' in your line?"
-                )
-
-            open_tag = True
-            # For loop for all the `
-            for thing in split_code_line:
-                # Actually the loop goes one extra round so
-                # we need this if condition for when there are no more `
-                if "~~" not in escaped_line:
-                    break
-                code_tick_index = escaped_line.index("~~")
-                if open_tag is True:
-                    escaped_line = (
-                        escaped_line[:code_tick_index]
-                        + "<s>"
-                        + escaped_line[code_tick_index + 2 :]
-                    )
-                    open_tag = False
-                else:
-                    escaped_line = (
-                        escaped_line[:code_tick_index]
-                        + "</s>"
-                        + escaped_line[code_tick_index + 2 :]
-                    )
-                    open_tag = True
-
-        escaped_line = escaped_line.replace("\\star", "*")
-        escaped_line = escaped_line.replace("\\tick", "`")
-
-        return escaped_line
+        return line
 
     def parseLine(self, line):
         escaped_line = escape(line)
@@ -163,12 +60,12 @@ class HTMLCompiler:
             if search is not None:
                 for i, group in enumerate(search.groups()[1:]):
                     formatted_line = formatted_line.replace(
-                        "{" + f"{i}" + "}", self.parseInline(group).rstrip()
+                        "{" + f"{i}" + "}", self.parse_inline(group).rstrip()
                     )
                 return formatted_line
 
         # Nothing was to be formatted, so we default to a paragraph
-        return "<p>" + self.parseInline(escaped_line).rstrip() + "</p>\n"
+        return "<p>" + self.parse_inline(escaped_line).rstrip() + "</p>\n"
 
     def compile(self) -> str:
         for line in self.mdFile:
