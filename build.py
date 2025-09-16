@@ -3,21 +3,21 @@ import sys
 import time
 import glob
 from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+from watchdog.events import FileSystemEventHandler, FileModifiedEvent
 from pathlib import Path
 from compiler import HTMLCompiler
 
 
-def write_index_html(post, output_path):
+def write_index_html(post: str, output_path: str) -> None:
     # Erases contents of index.html
     open(output_path, "w").close()
     with open(output_path, "a") as index_html:
         index_html.write("<!DOCTYPE html>\n")
 
         # Write header.html to index.html
-        with open("header.html", "r") as header_html:
+        with open("header.html", "r") as f:
             if HAS_KATEX:
-                header_html = header_html.read()
+                header_html = f.read()
                 i = header_html.find("</script>\n") + 10
                 index_html.write(
                     header_html[:i]
@@ -42,7 +42,7 @@ def write_index_html(post, output_path):
                     + header_html[i:]
                 )
             else:
-                index_html.write(header_html.read())
+                index_html.write(f.read())
 
         index_html.write("""
 <body>
@@ -66,10 +66,9 @@ def write_index_html(post, output_path):
             index_html.write(footer_html.read().format(date=today_date))
 
 
-def compile(post_name):
+def compile(post_name: str) -> None:
     # Create folder for index.html to sit in if it doesn't already exist
-    Path("results/" + postName).mkdir(parents=True, exist_ok=True)
-    global HAS_CODE_BLOCK
+    Path("results/" + post_name).mkdir(parents=True, exist_ok=True)
     with open("posts/" + post_name + ".md", "r") as f:
         html_compiler = HTMLCompiler(f)
         ugly_html = html_compiler.compile()
@@ -77,17 +76,14 @@ def compile(post_name):
 
 
 class FileHandler(FileSystemEventHandler):
-    def on_modified(self, event):
-        modifiedFileName = event.src_path.split("/")[-1][:-3]
-        compile(modifiedFileName)
-        print(f"{modifiedFileName}.md has been updated")
+    def on_modified(self, event: FileModifiedEvent) -> None:
+        modified_file_name = event.src_path.split("/")[-1][:-3]
+        compile(modified_file_name)
+        print(f"{modified_file_name}.md has been updated")
 
 
-def has_arg_flag(flag):
-    for i in range(len(sys.argv)):
-        if sys.argv[i] == flag:
-            return True
-    return False
+def has_arg_flag(flag: str) -> bool:
+    return any(sys.argv[i] == flag for i in range(len(sys.argv)))
 
 
 if __name__ == "__main__":
@@ -104,11 +100,11 @@ if __name__ == "__main__":
     Path("posts/").mkdir(parents=True, exist_ok=True)
 
     for post in posts:
-        postName = post.split("/")[-1][
+        post_name = post.split("/")[-1][
             :-3
         ]  # remove .md extension and folder from file name
-        print('Compiling post "' + postName + '"')
-        compile(postName)
+        print('Compiling post "' + post_name + '"')
+        compile(post_name)
 
     print("Posts converted successfully! Now observing changes...")
     event_handler = FileHandler()

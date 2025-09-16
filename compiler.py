@@ -3,6 +3,7 @@ from html import escape
 import re
 from macros import LINE_FORMAT, INLINE_FORMAT
 
+
 class TextMode(Enum):
     REGULAR = 1
     CODE_BLOCK = 2
@@ -12,20 +13,20 @@ class TextMode(Enum):
 
 
 class HTMLCompiler:
-    def __init__(self, mdFile):
-        self.mdFile = mdFile
+    def __init__(self, md_file: str) -> None:
+        self.mdFile = md_file
         self.html = ""
         self.state = TextMode.REGULAR
 
-    def parse_inline(self, line):
-        for c, htmlTag in INLINE_FORMAT.items():
+    def parse_inline(self, line: str) -> str:
+        for c, html_tag in INLINE_FORMAT.items():
             # Number of times `c` has been replaced
             i = 0
             while c in line:
                 if i % 2 == 0:
-                    line = line.replace(c, f"<{htmlTag}>", 1)
+                    line = line.replace(c, f"<{html_tag}>", 1)
                 else:
-                    line = line.replace(c, f"</{htmlTag}>", 1)
+                    line = line.replace(c, f"</{html_tag}>", 1)
 
                 i += 1
 
@@ -34,7 +35,7 @@ class HTMLCompiler:
 
         return line
 
-    def parseLine(self, line):
+    def parse_line(self, line: str) -> str:
         escaped_line = escape(line)
         for reg, exp in LINE_FORMAT.items():
             formatted_line = exp
@@ -65,13 +66,13 @@ class HTMLCompiler:
                         self.html += line
                 case TextMode.UNORDERED_LIST:
                     if line.startswith("* "):
-                        self.html += self.parseLine(line)
+                        self.html += self.parse_line(line)
                     else:
                         self.state = TextMode.REGULAR
                         self.html += "</ul>\n"
                 case TextMode.ORDERED_LIST:
                     if line.startswith("*) "):
-                        self.html += self.parseLine(line)
+                        self.html += self.parse_line(line)
                     else:
                         self.state = TextMode.REGULAR
                         self.html += "</ol>\n"
@@ -86,12 +87,12 @@ class HTMLCompiler:
                     elif line.startswith("* "):
                         self.state = TextMode.UNORDERED_LIST
                         self.html += "<ul>\n"
-                        self.html += self.parseLine(line)
+                        self.html += self.parse_line(line)
                     elif line.startswith("*) "):
                         self.state = TextMode.ORDERED_LIST
                         self.html += "<ol>\n"
-                        self.html += self.parseLine(line)
+                        self.html += self.parse_line(line)
                     else:
-                        self.html += self.parseLine(line)
+                        self.html += self.parse_line(line)
 
         return self.html
