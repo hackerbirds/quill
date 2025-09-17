@@ -1,9 +1,3 @@
-@font-face {
-    font-family: "Intel One Mono";
-    src: url("../fonts/IntelOneMono-Regular.woff2") format("woff2"),
-        url("../fonts/IntelOneMono-Regular.otf") format("otf");
-}
-
 * {
     padding: 0;
     margin: 0;
