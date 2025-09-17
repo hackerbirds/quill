@@ -9,8 +9,8 @@ INLINE_FORMAT = {
 
 # Full line format options
 LINE_FORMAT = {
-    # Empty line: line break
-    r"^(\n)$": "<br>\n",
+    # Ignore empty lines
+    r"^(\n)$": "\n",
     # "---": horizontal bar break
     r"^(---\n)$": "<hr>\n",
     # "# header": h1 header
@@ -45,7 +45,7 @@ LINE_FORMAT = {
                 <i>{2}</i>
             </div>\n""",
     # "=> https://thing.com/site": for links
-    r"^(=&gt; (?P<url>[^\s]+)\n)$": """<a class="arrow" href="{0}">{0}</a><br>\n""",
+    r"^(=&gt; (?P<url>[^\s]+)\n)$": """<a class="arrow" href="{0}">{0}</a>\n""",
     # "=> https://thing.com/site | With text to href link": for links as custom text
-    r"^(=&gt; (?P<url>[^\s]+) (?P<text>.*)\n)$": """<a class="arrow" href="{0}">{1}</a><br>\n""",
+    r"^(=&gt; (?P<url>[^\s]+) (?P<text>.*)\n)$": """<a class="arrow" href="{0}">{1}</a>\n""",
 }

@@ -44,23 +44,19 @@ def write_index_html(post: str, output_path: str) -> None:
             else:
                 index_html.write(f.read())
 
-        index_html.write("""
-<body>
-    <div class="banner" id="banner-id">
-        <a href="../" title="Homepage">
-            <img src="../assets/bird_neutral.svg" class="banner-logo" alt="Main page" />
-        </a>
-        <b>birdbrained</b>
-    </div>
-        """)
-        index_html.write("<main>\n")
-
+        index_html.write("<body>\n")
+        index_html.write("\t<main>\n")
+        index_html.write("\t\t<nav>\n")
+        index_html.write("This is the navigation bar")
+        index_html.write("\t\t</nav>\n")
+        index_html.write("\t\t<article>\n")
         # Write post contents
         index_html.write(post)
 
         today_date = datetime.today().strftime("%Y-%m-%d")
 
-        index_html.write("<br><br>\n</main>\n")
+        index_html.write("\t\t</article>\n")
+        index_html.write("<br><br>\n\t</main>\n")
         # Write footer
         with open("footer.html", "r") as footer_html:
             index_html.write(footer_html.read().format(date=today_date))

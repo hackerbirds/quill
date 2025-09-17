@@ -1,0 +1,112 @@
+@font-face {
+    font-family: "Intel One Mono";
+    src: url("../fonts/IntelOneMono-Regular.woff2") format("woff2"),
+        url("../fonts/IntelOneMono-Regular.otf") format("otf");
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-1: #fbfdfa;
+    --color-3: #b6b6b6;
+    --color-2: #c5e7b4;
+    --text-color: #121212;
+}
+
+body {
+    font-size: larger;
+    width: 100vw;
+    height: 100%;
+
+    color: var(--text-color);
+    background-color: var(--color-1);
+}
+
+main {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    padding: 2rem;
+    padding-top: 3rem;
+
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+
+    gap: 2rem;
+}
+
+nav {
+    position: static;
+    max-width: 250px;
+    background-color: var(--color-2);
+}
+
+article {
+    max-width: 700px;
+}
+
+div.attachment-div {
+    max-width: inherit;
+    height: auto;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    & img {
+        width: 80%;
+        height: auto;
+    }
+}
+
+ul,
+ol,
+a {
+    padding: 0 0 1rem 1rem;
+}
+
+hr,
+h1,
+h2,
+h3,
+p,
+div.attachment-div,
+div.f-v2,
+a {
+    margin-bottom: 1rem;
+}
+
+a {
+    display: block;
+    padding: 0.3rem;
+}
+
+a::before {
+    content: "-> ";
+}
+
+code {
+    font-family: monospace;
+}
+
+footer {
+    background-color: var(--color-3);
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    align-items: center;
+}
+
+div.f-v2 {
+    border: 4px dotted var(--color-2);
+    border-radius: 8px;
+    padding: 2rem;
+}

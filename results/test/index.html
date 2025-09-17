@@ -2,14 +2,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
-	<meta name="description" content="Put your description here.">
-	<title>hackerbirds</title>
+	<meta name="description" content="Created with love using quill.">
+	<title>Quill</title>
 
-	<link rel="preload" href="../assets/css/post-styles.css" as="style" />
-	<link rel="stylesheet" href="../assets/css/post-styles.css">
-
-	
-	<link rel="icon" type="image/svg" href="../assets/bird_neutral.svg">
+	<link rel="preload" href="../assets/css/style.css" as="style" />
+	<link rel="stylesheet" href="../assets/css/style.css">
 
 	<script type="text/javascript" src="../assets/js/themeToggler.js"></script>
 	<script>
@@ -17,70 +14,66 @@
 		loadTheme();
 	</script>
 </head>
-
 <body>
-    <div class="banner" id="banner-id">
-        <a href="../" title="Homepage">
-            <img src="../assets/bird_neutral.svg" class="banner-logo" alt="Main page" />
-        </a>
-        <b>birdbrained</b>
-    </div>
-        <main>
+	<main>
+		<nav>
+This is the navigation bar		</nav>
+		<article>
 <h1>Creating blog posts faster with quill</h1>
-<br>
+
 <p>(To see the text before building, see <code>posts/test.md</code>. If you want the compiled HTML, see <code>results/test/index.html</code>.)</p>
 <p>(If you are reading this through GitHub, the markdown viewer will automatically enable. Please click &quot;Raw&quot; to see the raw version, this is important!!)</p>
-<br>
+
 <p>Creating paragraphs is easy. Just write as much as you want in one straight line, and to make a new paragraph...</p>
-<br>
+
 <p>Just add a new line like we just did. If you want to separate your text even more, there&#x27;s always the horizontal bar:</p>
 <hr>
 <p>Now your text is extra separate. Awesome!!!</p>
-<br>
+
 <p>Each new line (<code>\n</code>) is a line break in HTML, so add spaces whenever you feel like it. Here&#x27;s an extra wide space for your paragraphs:</p>
-<br>
-<br>
-<br>
-<br>
+
+
+
+
 <p>Wow, silent.</p>
-<br>
+
 <h2>Headers</h2>
-<br>
+
 <h1>That&#x27;s big. For the title.</h1>
 <h2>That&#x27;s not as big. For main sections.</h2>
 <h3>That&#x27;s even smaller. The smallest, actually. For subsections.</h3>
-<br>
+
 <h2>Formatting</h2>
-<br>
+
 <p>You can do a bunch of inline stuff, like <b>bold</b>, <i>italic</i>, <u>underline</u>, or <s>strikethrough</s> text if that&#x27;s what you want. <i><b><s>why not all of them at once too?</s></b></i></p>
-<br>
+
 <p>Need to use a single * or ` in the middle of your text too? Write &quot;\ star&quot; or &quot;\ tick&quot; (without the space): <b>now*you*can*have*all*the*stars</b></p>
-<br>
+
 <p>Like this: * ` * ` *</p>
-<br>
+
 <p>Do you want your text to look monospace? There&#x27;s the <code>inline code formatting</code> for that.</p>
-<br>
+
 <pre aria-label="">
 Or a whole block,
   if you  need   to   paste
 
        anything without  formatting.
 </pre>
-<br>
+
 <h2>Links</h2>
-<br>
+
 <p>You can have a link like this:</p>
-<br>
-<a class="arrow" href="https://hackerbirds.neocities.org/">https://hackerbirds.neocities.org/</a><br>
-<br>
+
+<a class="arrow" href="https://hackerbirds.neocities.org/">https://hackerbirds.neocities.org/</a>
+
 <p>Or modify the text to your desires:</p>
-<br>
-<a class="arrow" href="https://hackerbirds.neocities.org/">Visit our blog</a><br>
-<br>
+
+<a class="arrow" href="https://hackerbirds.neocities.org/">Visit our blog</a>
+
 <h2>Images</h2>
-<br>
+
 <p>To add an image (for accessibility reasons you must add alt text), here&#x27;s how you do it:</p>
-<br>
+
 <div class="attachment-div">
                 <img 
                     onclick="window.open('./dinosaurs.jpeg', '_blank');" 
@@ -89,9 +82,9 @@ Or a whole block,
                     alt="Photo of adorable dinosaurs"
                 />
             </div>
-<br>
+
 <p>And if you want text under your image, add another parameter like such:</p>
-<br>
+
 <div class="attachment-div">
                 <img 
                     onclick="window.open('./dinosaurs.jpeg', '_blank');" 
@@ -101,11 +94,11 @@ Or a whole block,
                 />
                 <i>Aren&#x27;t they cute?</i>
             </div>
-<br>
+
 <h2>Lists</h2>
-<br>
+
 <p>Lists automatically start when you add an element and end when you make an empty new line, like this:</p>
-<br>
+
 <ul>
 <li>This is an unordered list.</li>
 <li>Unordered means the elements aren&#x27;t numbered.</li>
@@ -117,31 +110,32 @@ Or a whole block,
 <li>To add elements, just start the line with <code>&quot;*) &quot;</code>.</li>
 </ol>
 <h2>Do you like the hackerbird dialog blocks?</h2>
-<br>
+
 <div class="f-v2">
 	<div class="bird neutral"></div>
 	<p>Lucky for us, it&#x27;s just an <code>%</code> away.</p>
 </div>
-<br>
+
 <h2>HTML Block</h2>
-<br>
+
 <p>If all of these features aren&#x27;t enough for you, and you need extra customisation, the HTML block is for you:</p>
-<br>
+
 <p style="color: blue; background-color: black; padding: 6px;">
 Anything between the "<>" will be processed as raw HTML.
 </p>
-<br>
+
 <p>For instance, you could use it for &lt;details&gt; as such:</p>
-<br>
+
 <details>
 <summary>Click here to see more stuff!</summary>
 Boop! Hello!
 </details>
-<br>
+
 <p>It is far from perfect but we hope you will find our tool convenient.</p>
+		</article>
 <br><br>
-</main>
+	</main>
 <footer>
-    <p><i>the hackerbirds love you - . . - 2025-09-16</i></p>
+    <p><i>created with love using quill - . . - 2025-09-16</i></p>
     <a href="#">scroll up</a> &emsp; <a href="../">homepage</a>
 </footer>

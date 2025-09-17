@@ -1,9 +1,9 @@
 index.html
 posts/
-results/
-results/assets/katex
+results/*
 .DS_Store
 __pycache__/
 *.pyc
 .env
 .venv
+.ruff_cache
