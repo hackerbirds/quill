@@ -1,3 +1,9 @@
+# /// script
+# requires-python = ">=3.13"
+# dependencies = [
+#     "watchdog>=6.0.0",
+# ]
+# ///
 from datetime import datetime
 import sys
 import time
@@ -75,7 +81,7 @@ class FileHandler(FileSystemEventHandler):
     def on_modified(self, event: FileModifiedEvent) -> None:
         modified_file_name = event.src_path.split("/")[-1][:-3]
         compile(modified_file_name)
-        print(f"{modified_file_name}.md has been updated")
+        print(f"{time.asctime()} - {modified_file_name}.md has been recompiled")
 
 
 def has_arg_flag(flag: str) -> bool:
@@ -102,7 +108,7 @@ if __name__ == "__main__":
         print('Compiling post "' + post_name + '"')
         compile(post_name)
 
-    print("Posts converted successfully! Now observing changes...")
+    print("Initial compilation completed! Now observing future changes...")
     event_handler = FileHandler()
     observer = Observer()
     observer.schedule(event_handler, path="posts/", recursive=False)

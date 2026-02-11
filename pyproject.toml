@@ -1,2 +1,9 @@
+[project]
+name = "quill"
+version = "0.0.1"
+dependencies = [
+    "watchdog>=6.0.0",
+]
+
 [tool.ruff.lint]
 extend-select = ["SIM", "N", "ANN"]

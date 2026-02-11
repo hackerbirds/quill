@@ -18,9 +18,7 @@ We will not maintain or modify this project for anyone else but us. That said, i
 
 ## Installation and usage
 
-Using `pip`, as such: `python3 -m pip install -r requirements.txt`
-
-To write a post named `example-post`, make a file `posts/example-post.md`, write your stuff in there, then call `python3 build.py`. The script is build to stay active and automatically recompile whenever it detects a change inside `posts/*.md`.
+Using `uv`, you can run the build script with `uv run build.py`. While the build script is running, any modifications you make under `posts/*.md` will automatically compile into `results/*/index.html`.
 
 <details>
 <summary><h2>How to use</h2></summary>
