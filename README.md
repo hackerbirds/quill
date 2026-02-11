@@ -1,20 +1,8 @@
-# Quill (Hackerbirds's static blog page builder)
+# Quill
 
-> [!NOTE]  
-> This project is currently being rebuilt to be more usable for external users, with the goal
-> that anyone can use and customize this for their own blog.
+With Quill, you can write a static site quickly, starting from Markdown-style text. It is designed mainly for blog posts (since it was created for [ours](https://hackerbirds.neocities.org)). 
 
-Write blog posts quickly using this little script. Originally based on [Lichen](https://lichen.sensorstation.co/), it is backwards compatible with Gemtext formatting.
-
-## Disclaimers
-
-### This is not a fully-automated script
-
-You are meant to manually modify the code and resulting HTML to your liking if needed.
-
-### You are all alone in this adventure
-
-We will not maintain or modify this project for anyone else but us. That said, if you think you can use it or modify it for yourself, go ahead.
+Quill is easily extensible, so you can add new features for your Markdown. Changes in your Markdown files will automatically be recompiled. Inspired by [Lichen](https://lichen.sensorstation.co/), it also makes use of Gemtext formatting.
 
 ## Installation and usage
 
