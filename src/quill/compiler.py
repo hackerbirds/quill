@@ -1,7 +1,7 @@
 from enum import Enum
 from html import escape
 import re
-from macros import LINE_FORMAT, INLINE_FORMAT
+from .macros import LINE_FORMAT, INLINE_FORMAT
 
 
 class TextMode(Enum):

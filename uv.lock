@@ -3,15 +3,28 @@ revision = 3
 requires-python = ">=3.13"
 
 [[package]]
+name = "compiler"
+version = "0.2.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ca/49/6b1ee1aec8b590e52306f5b6d2d903c2b16ae0f99e160418c41d372ffc11/compiler-0.2.0.tar.gz", hash = "sha256:4c337bd9926ffef192c0057b853a239cc0acfcb4d3ca32f739c66b5f393f78ba", size = 3822, upload-time = "2017-07-29T09:24:21.233Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3a/5c/e0cfbb58ad022407b500af966d775b437adb64f9fe197986dfa38ebb428c/compiler-0.2.0-py3-none-any.whl", hash = "sha256:995dcdc44805c793ac7fb2f8702683b3d66ae27f2c1862c176a17a9ec9723673", size = 5622, upload-time = "2017-07-29T09:24:19.84Z" },
+]
+
+[[package]]
 name = "quill"
-version = "0.0.1"
-source = { virtual = "." }
+version = "0.1.0"
+source = { editable = "." }
 dependencies = [
+    { name = "compiler" },
     { name = "watchdog" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "watchdog", specifier = ">=6.0.0" }]
+requires-dist = [
+    { name = "compiler" },
+    { name = "watchdog", specifier = ">=6.0.0" },
+]
 
 [[package]]
 name = "watchdog"

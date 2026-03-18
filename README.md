@@ -6,7 +6,9 @@ Quill is easily extensible, so you can add new features for your Markdown. Chang
 
 ## Installation and usage
 
-Using `uv`, you can run the build script with `uv run build.py`. While the build script is running, any modifications you make under `posts/*.md` will automatically compile into `results/*/index.html`.
+Using `uv`, you can install the CLI tool with `uv tool install -e .`, and then simply run `quill` in your terminal. While the build script is running, any modifications you make under `posts/*.md` will automatically compile into `results/*/index.html`.
+
+On this repo you can run `quill -p posts/` to compile the example post in `posts/test.md`, and then view the result in `results/test/index.html`.
 
 <details>
 <summary><h2>How to use</h2></summary>
