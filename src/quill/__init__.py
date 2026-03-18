@@ -10,12 +10,8 @@ from .build import compile
 
 class FileHandler(FileSystemEventHandler):
     def on_modified(self, event: FileModifiedEvent) -> None:
-        modified_file_name = event.src_path.split("/")[-1][:-3]
-
         global HAS_KATEX
-        compile(modified_file_name, HAS_KATEX)
-        print(f"{time.asctime()} - {modified_file_name}.md has been recompiled")
-
+        compile(event.src_path, HAS_KATEX)
 
 def has_arg_flag(flag: str) -> bool:
     return any(sys.argv[i] == flag for i in range(len(sys.argv)))
@@ -43,7 +39,6 @@ def main() -> None:
     global HAS_KATEX, HAS_CODE_BLOCK
     HAS_CODE_BLOCK = parsed_cli_args.code_block
     HAS_KATEX = parsed_cli_args.katex
-    posts = glob.glob(str(parsed_cli_args.posts / "*.md"))
 
     if HAS_KATEX:
         print("Compiling with KaTeX")
@@ -51,20 +46,23 @@ def main() -> None:
         print("Compiling with formatted code blocks")
 
     # Create folders if they don't exist already
-    Path("posts/").mkdir(parents=True, exist_ok=True)
+    parsed_cli_args.posts.mkdir(parents=True, exist_ok=True)
 
+    posts = glob.glob(str(parsed_cli_args.posts / "*.md"))
     for post_path in posts:
         compile(post_path, HAS_KATEX)
 
-    print("Initial compilation completed! Now observing future changes...")
-    event_handler = FileHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path="posts/", recursive=False)
-    observer.start()
+    if parsed_cli_args.watch:
+        print("Watching for file changes...")
+        print("To stop, end with CTRL+C")
+        event_handler = FileHandler()
+        observer = Observer()
+        observer.schedule(event_handler, path=parsed_cli_args.posts, recursive=False)
+        observer.start()
 
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+        try:
+            while True:
+                time.sleep(1)
+        except KeyboardInterrupt:
+            observer.stop()
+        observer.join()
