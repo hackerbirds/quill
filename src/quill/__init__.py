@@ -10,8 +10,12 @@ from .build import compile
 
 class FileHandler(FileSystemEventHandler):
     def on_modified(self, event: FileModifiedEvent) -> None:
+        post_name = event.src_path.split("/")[-1][
+            :-3
+        ]  # remove .md extension and folder from file name
+
         global HAS_KATEX
-        compile(event.src_path, HAS_KATEX)
+        compile(event.src_path, post_name, HAS_KATEX)
 
 def has_arg_flag(flag: str) -> bool:
     return any(sys.argv[i] == flag for i in range(len(sys.argv)))
@@ -45,12 +49,24 @@ def main() -> None:
     if HAS_CODE_BLOCK:
         print("Compiling with formatted code blocks")
 
-    # Create folders if they don't exist already
-    parsed_cli_args.posts.mkdir(parents=True, exist_ok=True)
 
-    posts = glob.glob(str(parsed_cli_args.posts / "*.md"))
-    for post_path in posts:
-        compile(post_path, HAS_KATEX)
+    if not parsed_cli_args.posts.is_dir():
+        post_name = str(parsed_cli_args.posts)[
+            :-3
+        ]  # remove .md extension from file name
+
+        compile(parsed_cli_args.posts, post_name, HAS_KATEX)
+    else:
+        # Create folders if they don't exist already
+        parsed_cli_args.posts.mkdir(parents=True, exist_ok=True)
+
+        posts = glob.glob(str(parsed_cli_args.posts / "*.md"))
+        for post_path in posts:
+            post_name = post_path.split("/")[-1][
+                :-3
+            ]  # remove .md extension and folder from file name
+
+            compile(post_path, post_name, HAS_KATEX)
 
     if parsed_cli_args.watch:
         print("Watching for file changes...")

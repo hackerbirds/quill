@@ -55,16 +55,13 @@ def write_index_html(post: str, output_path: str, katex: bool) -> None:
         with open("footer.html", "r") as footer_html:
             index_html.write(footer_html.read().format(date=today_date))
 
-def compile(post_path: str, katex: bool) -> None:
-    post_name = post_path.split("/")[-1][
-        :-3
-    ]  # remove .md extension and folder from file name
-
-    print(f"Compiling {post_name}")
+def compile(input_path: Path, name: str, katex: bool) -> None:
+    output_path = Path("results") / name / "index.html"
+    print(f"Compiling {name} from path {input_path} to {output_path}")
 
     # Create folder for index.html to sit in if it doesn't already exist
-    Path("results/" + post_name).mkdir(parents=True, exist_ok=True)
-    with open(post_path, "r") as f:
+    (Path("results") / name).mkdir(parents=True, exist_ok=True)
+    with open(input_path, "r") as f:
         html_compiler = HTMLCompiler(f)
         ugly_html = html_compiler.compile()
-        write_index_html(ugly_html, "results/" + post_name + "/index.html", katex)
+        write_index_html(ugly_html, output_path, katex)

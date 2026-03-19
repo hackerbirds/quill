@@ -1,4 +1,4 @@
-# Creating blog posts faster with quill
+# Creating blog posts faster with Quill
 
 (To see the text before building, see `posts/test.md`. If you want the compiled HTML, see `results/test/index.html`.)
 (If you are reading this through GitHub, the markdown viewer will automatically enable. Please click "Raw" to see the raw version, this is important!!)
@@ -53,11 +53,11 @@ Or modify the text to your desires:
 
 To add an image (for accessibility reasons you must add alt text), here's how you do it:
 
--> ./dinosaurs.jpeg | Photo of adorable dinosaurs
+-> https://upload.wikimedia.org/wikipedia/commons/4/4c/Ada_Lovelace_daguerreotype_by_Antoine_Claudet_1843_-_cropped.png | Ada Lovelace
 
 And if you want text under your image, add another parameter like such:
 
--> ./dinosaurs.jpeg | Photo of adorable dinosaurs | Aren't they cute?
+-> https://upload.wikimedia.org/wikipedia/commons/4/4c/Ada_Lovelace_daguerreotype_by_Antoine_Claudet_1843_-_cropped.png | Ada Lovelace | Daguerreotype of Ada Lovelace
 
 ## Lists
 
